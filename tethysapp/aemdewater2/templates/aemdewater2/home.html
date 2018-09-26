@@ -1,0 +1,201 @@
+{% extends "aemdewater2/base.html" %}
+
+{% load tethys_gizmos %}
+
+{% load staticfiles %}
+
+{% block app_navigation_items %}
+
+<!--   <button type="button" class="btn btn-default" data-toggle="modal" data-target="#welcome-popup">Instructions</button> -->
+   <button type="button" class="btn btn-primary" onclick="welcome_modal();">Instructions</button>
+
+    <li><p> </p></li>
+
+    <li>
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-info active">
+                <input id="25" type="radio" name="distance" autocomplete="off" value="USA" checked onchange="USUnits();"> U.S.
+            </label>
+            <label class="btn btn-info">
+                <input id="26" type="radio" name="distance" autocomplete="off" value="Metric" onchange="metricUnits();"> Metric
+            </label>
+        </div>
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-info active">
+                <input id="27" type="radio" name="time" autocomplete="off" value="sec" checked onchange="secUnits();"> Seconds
+            </label>
+            <label class="btn btn-info">
+                <input id="28" type="radio" name="time" autocomplete="off" value="day" onchange="dayUnits();"> Days
+            </label>
+        </div>
+    </li>
+	<li class='title'><b>Aquifer Properties</b></li>
+
+	  	{% csrf_token %}
+
+	  	{% gizmo text_input k %}
+		{% gizmo text_input bedrock %}
+		{% gizmo text_input iwte %}
+
+    <li class='title'><b>Project Specifications</b></li>
+
+		{% gizmo text_input q %}
+		{% gizmo text_input dwte %}
+
+        {% gizmo toggle_switch slurry %}
+        {% gizmo text_input slurryK %}
+        {% gizmo text_input slurryT %}
+
+		{% gizmo button execute %}
+
+{% endblock %}
+
+
+{% block app_content %}
+
+    {{ block.super }}
+
+    {% gizmo map_view map_view_options %}
+    <div id="loading" class="load">
+        <img id="loading-image"
+        src="{% static 'aemdewater2/images/ajax-loader-transparent.gif' %}"
+        alt="Loading..."/>
+    </div>
+
+<!--Create small legend for color scheme-->
+<div id="colorLegend" style="display: none">
+
+    <div class="legend2">
+        <span id="10" class="elevation">Water Table (Raster)</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo blue"></div>
+        <span id="1" class="elevation">100</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo lBlue"></div>
+        <span id="2" class="elevation">96-87</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo eLBlue"></div>
+        <span id="3" class="elevation">87-78</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo turq"></div>
+        <span id="4" class="elevation">78-70</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo green"></div>
+        <span id="5" class="elevation">70-61</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo yellow"></div>
+        <span id="6" class="elevation">61-52</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo orange"></div>
+        <span id="7" class="elevation">52-43</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo red"></div>
+        <span id="8" class="elevation">43-1</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo black"></div>
+        <span id="9" class="elevation">0</span>
+    </div>
+
+</div>
+
+<p><div id="dewatered" style="display: none">
+
+    <div class="legend2">
+        <span id="13" class="elevation">Dewatered Region</span>
+    </div>
+
+    <div class="legend2">
+        <div class="foo2 green"></div>
+        <span id="11" class="elevation">Dewatered</span>
+    </div>
+
+    <div class="legend2">
+        <div class="foo2 red"></div>
+        <span id="12" class="elevation">Not Dewatered</span>
+    </div>
+
+
+</div></p>
+
+<div id="contourLegend" style="display: none">
+
+    <div class="legend2">
+        <span id="24" class elevation>Contour Elevations</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo blue"></div>
+        <span id="14" class="elevation">"null"</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo lBlue"></div>
+        <span id="15" class="elevation">"null"</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo eLBlue"></div>
+        <span id="16" class="elevation">"null"</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo turq"></div>
+        <span id="17" class="elevation">"null"</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo green"></div>
+        <span id="18" class="elevation">"null"</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo yellow"></div>
+        <span id="19" class="elevation">"null"</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo orangeLight"></div>
+        <span id="20" class="elevation">"null"</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo orange2"></div>
+        <span id="21" class="elevation">"null"</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo redBright"></div>
+        <span id="22" class="elevation">"null"</span>
+    </div>
+
+    <div class="legend">
+        <div class="foo black"></div>
+        <span id="23" class="elevation">"null"</span>
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block app_actions %}
+
+{% endblock %}
